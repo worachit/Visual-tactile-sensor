@@ -1,0 +1,12 @@
+{
+    "blob": {
+        "minThreshold": 20.0,
+        "maxThreshold": 126.0,
+        "minArea": 3.0999999046325684,
+        "maxArea": 50.099998474121094,
+        "minCircularity": 0.03999999910593033,
+        "minConvexity": 0.10999999940395355,
+        "minInertiaRatio": 0.009999999776482582
+    },
+    "perspective_transform" : [[0, 0], [100, 0], [100, 300], [1, 140]]
+}
