@@ -1,5 +1,6 @@
 *.log
 BOM/*
 CAD/*
-Paper/*
+!CAD/Marker/
+!CAD/Prototype_01/3D_print/
 Presentation/*
