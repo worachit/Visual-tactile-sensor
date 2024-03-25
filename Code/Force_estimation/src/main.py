@@ -10,17 +10,18 @@ class VisualTactile:
         self.video_capture = "/dev/video4"
         # self.video_capture = "../video/marker_stable_2mm_1.mp4"
 
-
         self.capture_frame = None
         self.processing_frame = None
 
-        self.JSON_PARAMS_PATH = "../params.json"
-        
+        self.TRANSFORM_WIDTH = 640
+        self.TRANSFORM_HEIGHT = 640
+
+        self.JSON_PARAMS_PATH = "../params.json"        
 
         self.blob_params = cv2.SimpleBlobDetector_Params()
 
         self.is_perspective_transform = True
-        self.is_record = False
+        self.is_record = True
         self.record_window_name = ""
 
         if self.is_record:
@@ -33,8 +34,8 @@ class VisualTactile:
 
     def loadMarkerTracker(self):
         self.marker_tracker = find_marker.Matching(
-            N_=8, 
-            M_=10, 
+            _NUM_ROW=8, 
+            _NUM_COL=10, 
             fps_=20, 
             x0_=153.6230010986328, 
             y0_=45.08559036254883,
@@ -141,9 +142,6 @@ class VisualTactile:
                 self.perspectiveTransform()
 
             self.capture_frame = deepcopy(self.processing_frame)
-            
-            if self.is_record:
-                self.out.write(self.capture_frame)
 
             self.processing_frame = cv2.cvtColor(self.processing_frame, cv2.COLOR_BGR2GRAY)
             self.preprocessing()
@@ -153,16 +151,17 @@ class VisualTactile:
             self.marker_tracker.init(centers)
             self.marker_tracker.run()
             flow = self.marker_tracker.get_flow()
-            # print(self.flow)
 
-            frame2 = 255*np.ones((self.TRANSFORM_WIDTH, self.TRANSFORM_HEIGHT, 3))
-            for x,y in centers:
-                cv2.circle(frame2, (int(x), int(y)), 3, (0, 0, 255), -1)
-            self.drawFlow(frame2, flow) 
+            # frame2 = 255*np.ones((self.TRANSFORM_WIDTH, self.TRANSFORM_HEIGHT, 3))
+            # for x,y in centers:
+            #     cv2.circle(frame2, (int(x), int(y)), 3, (0, 0, 255), -1)
+            self.drawFlow(self.processing_frame, flow) 
 
-            cv2.imshow('Video Frame Marker', frame2)
-
+            # cv2.imshow('Video Frame Marker', frame2)
             ######
+            
+            if self.is_record:
+                self.out.write(self.processing_frame)
 
             cv2.imshow('Video Frame', self.capture_frame)
             cv2.imshow('Video Frame Process', self.processing_frame)

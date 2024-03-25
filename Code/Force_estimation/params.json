@@ -1,33 +1,33 @@
 {
-    "frame_dimension" : {
-        "width" : 640,
-        "height" : 640
+    "frame_dimension": {
+        "width": 640,
+        "height": 640
     },
     "blob": {
         "minThreshold": 48.0,
         "maxThreshold": 186.0,
-        "minArea": 110.0999984741211,
-        "maxArea": 514.0999755859375,
+        "minArea": 108.0999984741211,
+        "maxArea": 512.0999755859375,
         "minCircularity": 0.009999999776482582,
         "minConvexity": 0.009999999776482582,
         "minInertiaRatio": 0.009999999776482582
     },
     "perspective_transform": [
         [
-            159.0,
-            83.0
+            83.0,
+            36.0
         ],
         [
-            506.0,
-            83.0
+            569.0,
+            41.0
         ],
         [
-            506.0,
-            366.0
+            569.0,
+            435.0
         ],
         [
-            159.0,
-            366.0
+            76.0,
+            436.0
         ]
     ],
     "processing_parameter": {

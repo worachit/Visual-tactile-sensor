@@ -10,7 +10,6 @@ double dist_sqr(Point_t a, Point_t b){
     return (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y);
 }
 
-
 double sum(Point_t a){
     return (a.x*a.x + a.y*a.y);
 }
@@ -22,19 +21,19 @@ int Matching::precessor(int i, int j) {
         && Dist[i][j] >= dmin);
 }
 
-Matching::Matching(int N_, int M_, int fps_, double x0_, double y0_, double dx_, double dy_){
+Matching::Matching(int _NUM_ROW, int _NUM_COL, int fps_, double x0_, double y0_, double dx_, double dy_){
 
-    N = N_;
-    M = M_;
-    NM = N * M;
+    NUM_ROW = _NUM_ROW;
+    NUM_COL = _NUM_COL;
+    NUM_ROW_COL = NUM_ROW * NUM_COL;
 
     fps = fps_;
 
     x_0 = x0_; y_0 = y0_; dx = dx_; dy = dy_;
 
     int i, j;
-    for (i = 0; i < N; i++) {
-        for (j = 0; j < M; j++) {
+    for (i = 0; i < NUM_ROW; i++) {
+        for (j = 0; j < NUM_COL; j++) {
             O[i][j].x = x_0 + j * dx;
             O[i][j].y = y_0 + i * dy;
         }
@@ -60,7 +59,6 @@ void Matching::init(std::vector<std::vector<double>> centers) {
         C[i].x = centers[i][0];
         C[i].y = centers[i][1];
         C[i].id = i;
-        // std::cout<<C[i].x<<" "<<C[i].y<<" "<<std::endl;
     }
 
     // init arrays for search
@@ -71,7 +69,7 @@ void Matching::init(std::vector<std::vector<double>> centers) {
     // sort by x-axis, if same by y-axis
     std::sort(C, C+n);
 
-    // calculate distance and angle O(N^2M^2)
+    // calculate distance and angle O(NUM_ROW^2M^2)
     for (i = 0; i < n; i++) {
         for (j = 0; j < i; j++) {
             Dist[i][j] = dist_sqr(C[i], C[j]);
@@ -86,8 +84,8 @@ void Matching::run(){
 
     time_st = clock();
 
-    missing = NM - n;
-    spare = n - NM;
+    missing = NUM_ROW_COL - n;
+    spare = n - NUM_ROW_COL;
     missing = missing < 0 ? 0 : missing;
     spare = spare < 0 ? 0 : spare;
     dfs(0, 0, missing, spare);
@@ -107,22 +105,20 @@ void Matching::run(){
             O[MinRow[i]][MinCol[i]].y = C[i].y;
         }
     }
-    // std::cout<<"MINF "<<minf<<"\t\t";
 }
 
 std::tuple<vvd, vvd, vvd, vvd, vvd> Matching::get_flow() {
-    vvd Ox(N), Oy(N), Cx(N), Cy(N), Occupied(N);
+    vvd Ox(NUM_ROW), Oy(NUM_ROW), Cx(NUM_ROW), Cy(NUM_ROW), Occupied(NUM_ROW);
 
     int i, j;
-    for(i = 0; i < N; i++){
-        Ox[i] = vd(M); Oy[i] = vd(M); Cx[i] = vd(M); Cy[i] = vd(M); Occupied[i] = vd(M);
-        for(j = 0; j < M; j++){
+    for(i = 0; i < NUM_ROW; i++){
+        Ox[i] = vd(NUM_COL); Oy[i] = vd(NUM_COL); Cx[i] = vd(NUM_COL); Cy[i] = vd(NUM_COL); Occupied[i] = vd(NUM_COL);
+        for(j = 0; j < NUM_COL; j++){
             Ox[i][j] = O[i][j].x;
             Oy[i][j] = O[i][j].y;
             Cx[i][j] = MinD[i][j].x;
             Cy[i][j] = MinD[i][j].y;
             Occupied[i][j] = MinOccupied[i][j];
-            // Point a(matcher.O[i][j].x, matcher.O[i][j].y), b(matcher.MinD[i][j].x + 2 * (matcher.MinD[i][j].x - matcher.O[i][j].x), matcher.MinD[i][j].y + 2 * (matcher.MinD[i][j].y - matcher.O[i][j].y));
         }
     }
 
@@ -155,7 +151,7 @@ double Matching::calc_cost(int i){
             cost +=  K2 * c;
         }
     }
-    if(Row[i] < N - 1){
+    if(Row[i] < NUM_ROW - 1){
         down = occupied[Row[i] + 1][Col[i]];
         if (down > -1){
             flow2 = C[down] - O[Row[i]+1][Col[i]];
@@ -177,8 +173,8 @@ double Matching::infer(){
 
     Point_t moving;
 
-    for(i = 0; i < N; i++){
-        for(j = 0;j < M; j++){
+    for(i = 0; i < NUM_ROW; i++){
+        for(j = 0;j < NUM_COL; j++){
             if(occupied[i][j] <= -1){
                 moving.x = 0;
                 moving.y = 0;
@@ -188,7 +184,7 @@ double Matching::infer(){
                     ny = j + dir[k][1];
                     nnx = nx + dir[k][0];
                     nny = ny + dir[k][1];
-                    if (nnx < 0 || nnx >= N || nny < 0 || nny >= M) continue;
+                    if (nnx < 0 || nnx >= NUM_ROW || nny < 0 || nny >= NUM_COL) continue;
                     if (occupied[nx][ny] <= -1 || occupied[nnx][nny] <= -1) continue;
                     //// distance_to_current_marker
                     moving = moving + (C[occupied[nx][ny]] - O[nx][ny] + (C[occupied[nx][ny]] - O[nx][ny] - C[occupied[nnx][nny]] + O[nnx][nny]));
@@ -197,7 +193,7 @@ double Matching::infer(){
                 if(cnt == 0){
                     for(x=i-d;x<=i+d;x++){
                         for(y=j-d;y<=j+d;y++){
-                            if (x < 0 || x >= N || y < 0 || y >= M) continue;
+                            if (x < 0 || x >= NUM_ROW || y < 0 || y >= NUM_COL) continue;
                             if (occupied[x][y] <= -1) continue;
                             moving = moving + (C[occupied[x][y]] - O[x][y]);
                             cnt += 1;
@@ -207,7 +203,7 @@ double Matching::infer(){
                 if(cnt == 0){
                     for(x=i-d-1;x<=i+d+1;x++){
                         for(y=j-d-1;y<=j+d+1;y++){
-                            if (x < 0 || x >= N || y < 0 || y >= M) continue;
+                            if (x < 0 || x >= NUM_ROW || y < 0 || y >= NUM_COL) continue;
                             if (occupied[x][y] <= -1) continue;
                             moving = moving + (C[occupied[x][y]] - O[x][y]);
                             cnt += 1;
@@ -216,22 +212,22 @@ double Matching::infer(){
                 }
                 D[i][j] = O[i][j] + moving / (cnt + 1e-6);
                 if (j == 0 && D[i][j].y >= O[i][j].y - dy / 2.0) boarder_nb++;
-                if (j == N-1 && D[i][j].y <= O[i][j].y + dy / 2.0) boarder_nb++;
+                if (j == NUM_ROW-1 && D[i][j].y <= O[i][j].y + dy / 2.0) boarder_nb++;
                 cost = cost + K1 * sum(D[i][j] - O[i][j]);
             }
         }
     }
 
-    if(boarder_nb >= N -1 ) cost += 1e7;
+    if(boarder_nb >= NUM_ROW -1 ) cost += 1e7;
 
-    for(i = 0; i < N; i++){
-        for(j = 0;j < M; j++){
+    for(i = 0; i < NUM_ROW; i++){
+        for(j = 0;j < NUM_COL; j++){
             if(occupied[i][j] <= -1){
                 flow1 = D[i][j] - O[i][j];
                 for (k = 0; k < 4; k++){
                     nx = i + dir[k][0];
                     ny = j + dir[k][1];
-                    if (nx < 0 || nx > N - 1 || ny < 0 || ny > M -1) continue;
+                    if (nx < 0 || nx > NUM_ROW - 1 || ny < 0 || ny > NUM_COL -1) continue;
                     if (occupied[nx][ny] > -1){
                         flow2 = (C[occupied[nx][ny]] - O[nx][ny]);
                         cost +=  K2 * sum(flow2 - flow1);
@@ -248,8 +244,6 @@ double Matching::infer(){
 }
 
 void Matching::dfs(int i, double cost, int missing, int spare){
-    // if(occupied[6][0] <= -1 && occupied[7][0] <= -1)
-    // std::cout<<i<<" "<<"COST: "<<cost<<"fmin: "<< minf<< " missing "<<missing<<" spare "<<spare<<std::endl;
     if (((float)(clock()-time_st))/CLOCKS_PER_SEC >= 1.0 / fps) return;
     if(cost >= minf && minf != -1) return;
     if(cost >= cost_threshold) return;
@@ -257,24 +251,17 @@ void Matching::dfs(int i, double cost, int missing, int spare){
     double c;
     if (i >= n) {
         cost += infer();
-        // printf("\nCOST: %lf\n", cost);
-        // for (j=0;j<n;j++){
-        //     printf("%d %d \t %lf %lf\n", Row[j], Col[j], C[j].x, C[j].y);
-        // }
-        // printf("--------------------------------------------\n");
         if (cost < minf || minf == -1) {
-            // if (int(cost) == 31535) cost = 0;
             minf = cost;
             for (j=0;j<n;j++){
-                // printf("%d %d \t %lf %lf\n", Row[j], Col[j], C[j].x, C[j].y);
                 MinRow[j] = Row[j];
                 MinCol[j] = Col[j];
                 if (Row[j] < 0) continue;
                 D[Row[j]][Col[j]].x = C[j].x;
                 D[Row[j]][Col[j]].y = C[j].y;
             }
-            for (j=0;j<N;j++){
-                for (k=0;k<M;k++){
+            for (j=0;j<NUM_ROW;j++){
+                for (k=0;k<NUM_COL;k++){
                     MinOccupied[j][k] = occupied[j][k];
                     MinD[j][k].x = D[j][k].x;
                     MinD[j][k].y = D[j][k].y;
@@ -286,18 +273,16 @@ void Matching::dfs(int i, double cost, int missing, int spare){
 
 
     for (j=0;j<i;j++) {
-        // if (i == 45) std::cout<<i<<" "<<j<<std::endl;
-
         if (precessor(i, j)) {
             Row[i] = Row[j];
             Col[i] = Col[j] + 1;
             count++;
-            if (Col[i] >= M) continue;
+            if (Col[i] >= NUM_COL) continue;
             if (occupied[Row[i]][Col[i]] > -1) continue;
             if (Row[i] > 0 && occupied[Row[i]-1][Col[i]] > -1 && C[i].y <= C[occupied[Row[i]-1][Col[i]]].y) continue;
-            if (Row[i] < N - 1 && occupied[Row[i]+1][Col[i]] > -1 && C[i].y >= C[occupied[Row[i]+1][Col[i]]].y) continue;
+            if (Row[i] < NUM_ROW - 1 && occupied[Row[i]+1][Col[i]] > -1 && C[i].y >= C[occupied[Row[i]+1][Col[i]]].y) continue;
             int vflag = 0;
-            for (k=0;k<N;k++){
+            for (k=0;k<NUM_ROW;k++){
                 same_col = occupied[k][Col[i]];
                 if(same_col > -1 && ((k < Row[i] && C[same_col].y > C[i].y) || (k > Row[i] && C[same_col].y < C[i].y))){
                     vflag = 1;
@@ -313,44 +298,38 @@ void Matching::dfs(int i, double cost, int missing, int spare){
         }
     }
 
-
-    // if (count == 0) {
-        for (j=0;j<N;j++) {
-            if(done[j] == 0){
-                flag = 0;
-                for (int k = 0;k < N;k++) {
-                    // printf("%d %d %d %d\t\t", k, done[k], first[k], C[i].x);
-                    if (done[k] && 
-                        ((k < j && first[k] > C[i].y) || (k > j && first[k] < C[i].y))
-                        ){
-                        flag = 1;
-                        break;
-                    }
+    for (j=0;j<NUM_ROW;j++) {
+        if(done[j] == 0){
+            flag = 0;
+            for (int k = 0;k < NUM_ROW;k++) {
+                // printf("%d %d %d %d\t\t", k, done[k], first[k], C[i].x);
+                if (done[k] && 
+                    ((k < j && first[k] > C[i].y) || (k > j && first[k] < C[i].y))
+                    ){
+                    flag = 1;
+                    break;
                 }
-                if (flag == 1) continue;
-                done[j] = 1;
-                first[j] = C[i].y;
-                Row[i] = j;
-                Col[i] = 0;
-
-                occupied[Row[i]][Col[i]] = i;
-                c = calc_cost(i);
-
-                dfs(i+1, cost+c, missing, spare);
-                done[j] = 0;
-                occupied[Row[i]][Col[i]] = -1;
             }
+            if (flag == 1) continue;
+            done[j] = 1;
+            first[j] = C[i].y;
+            Row[i] = j;
+            Col[i] = 0;
+            occupied[Row[i]][Col[i]] = i;
+            c = calc_cost(i);
+            dfs(i+1, cost+c, missing, spare);
+            done[j] = 0;
+            occupied[Row[i]][Col[i]] = -1;
         }
-    // }
+    }
 
     // considering missing points
-    // if (C[i].y > dy && C[i].y < O[0][M-1].y - dy / 2) return;
     for(m=1;m<=missing;m++){
-        for (j=0;j<N;j++) {
-            // if (j >= 1 && j < N - 1) continue;
+        for (j=0;j<NUM_ROW;j++) {
+            // if (j >= 1 && j < NUM_ROW - 1) continue;
             if(fabs(C[i].y - O[j][0].y) > moving_max) continue;
-            for(k=M-1;k>=0;k--) if(occupied[j][k]>-1) break;
-            if(k+m+1>=M) continue;
+            for(k=NUM_COL-1;k>=0;k--) if(occupied[j][k]>-1) break;
+            if(k+m+1>=NUM_COL) continue;
             if (sqrt(sum(C[i] - O[j][k+m+1])) > moving_max) continue;
             for(int t=1;t<=m;t++) occupied[j][k+t] = -2;
             Row[i] = j;
@@ -378,7 +357,7 @@ std::tuple<double, double> Matching::test() {
 
 PYBIND11_MODULE(find_marker, m) {
     py::class_<Matching>(m, "Matching")
-        .def(py::init<int, int, int, double, double, double, double>(), py::arg("N_") = 8, py::arg("M_") = 8, py::arg("fps_") = 30, py::arg("x0_") = 80., py::arg("y0_") = 15., py::arg("dx_") = 21., py::arg("dy_") = 21.)
+        .def(py::init<int, int, int, double, double, double, double>(), py::arg("_NUM_ROW") = 8, py::arg("_NUM_COL") = 8, py::arg("fps_") = 30, py::arg("x0_") = 80., py::arg("y0_") = 15., py::arg("dx_") = 21., py::arg("dy_") = 21.)
         .def("run", &Matching::run)
         .def("test", &Matching::test)
         .def("init", &Matching::init)

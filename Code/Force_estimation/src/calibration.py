@@ -21,11 +21,11 @@ class VisualTactile:
 
         self.blob_params = cv2.SimpleBlobDetector_Params()
         
-        self.JSON_PARAMS_PATH = "./params.json"
+        self.JSON_PARAMS_PATH = "../params.json"
 
-        self.is_calibrate_perspective = False
+        self.is_calibrate_perspective = True
 
-        self.is_record = True
+        self.is_record = False
 
         if self.is_record == True:
             self.fourcc = cv2.VideoWriter_fourcc(*'mp4v')

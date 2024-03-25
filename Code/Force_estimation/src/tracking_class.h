@@ -57,12 +57,7 @@ struct Point_t
 
 class Matching{
 private:
-    // double x_0 = 160, y_0 = 30, dx = 43.0, dy = 43.0; //GelSight Hanjun x1
     double x_0, y_0, dx, dy; //GelSight Hanjun x0.5
-    // double x_0 = 34, y_0 = 37, dx = 27.0, dy = 27.0; //34 - 223,  37 - 200 GelSight_SX
-    // double x_0 = 6, y_0 = 16, dx = 31.0, dy = 31.0; //6 - 130,  16 - 138 HSR x0.5
-    // double x_0 = 12, y_0 = 32, dx = 62.0, dy = 62.0; //6 - 130,  16 - 138 HSR x1
-    // double x_0 = 15, y_0 = 15, dx = 23.0, dy = 23.0; //15-195 15-202 HSR blue
 
     int Row[MAXNM], Col[MAXNM];
     int Dist[MAXNM][MAXNM], done[MAXN], occupied[MAXN][MAXM], first[MAXN];
@@ -75,7 +70,7 @@ private:
 
 public:
     int n;
-    int N, M, NM;
+    int NUM_ROW, NUM_COL, NUM_ROW_COL;
     int flag_record = 1;
 
     int MinRow[MAXNM], MinCol[MAXNM], MinOccupied[MAXN][MAXM];
@@ -84,8 +79,7 @@ public:
     Point_t O[MAXN][MAXM], D[MAXN][MAXM], C[MAXNM], MinD[MAXN][MAXM];
     double K1 = 0.1, K2 = 1;
 
-    Matching(int N_=8, int M_=8, int fps_=30, double x_0 = 80., double y_0 = 15., double dx = 21.0, double dy = 21.0);
-    // void init(Point_t *centers, int count);
+    Matching(int _NUM_ROW=8, int _NUM_COL=8, int fps_=30, double x_0 = 80., double y_0 = 15., double dx = 21.0, double dy = 21.0);
     void init(std::vector<std::vector<double>> input);
     int precessor(int i, int j);
     double calc_cost(int i);
