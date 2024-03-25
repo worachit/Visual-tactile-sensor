@@ -3,4 +3,5 @@ BOM/*
 CAD/*
 !CAD/Marker/
 !CAD/Prototype_01/3D_print/
+!Code/stm32_workspace/.metadata/
 Presentation/*
