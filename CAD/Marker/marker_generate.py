@@ -7,7 +7,7 @@ import random
 A4_WIDTH = 2480
 A4_HEIGHT = 3508
 
-scaling_from_print = 1/0.7
+scaling_from_print = 1/0.9
 
 MAX_MARK_DIAMETER = 1.3*scaling_from_print # mm
 MARKER_SPACING = 3.5*scaling_from_print # mm
@@ -63,7 +63,7 @@ def generateMarks(paper, is_random=False):
 def createPaper():
     # Create a blank A4 sized white image
     paper = np.ones((A4_HEIGHT, A4_WIDTH, 3), dtype=np.uint8) * 255
-    generateMarks(paper, is_random=True)
+    generateMarks(paper, is_random=False)
 
     return paper
 
