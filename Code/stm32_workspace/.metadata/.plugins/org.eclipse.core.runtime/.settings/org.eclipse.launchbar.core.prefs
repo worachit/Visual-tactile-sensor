@@ -7,5 +7,5 @@ org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:Test_camera\ Debug/activeLaunch
 org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:Test_camera\ Debug/activeLaunchTarget=null\:---
 org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:test\ Debug/activeLaunchMode=debug
 org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:test\ Debug/activeLaunchTarget=null\:---
-org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:test2\ Debug/activeLaunchMode=run
+org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:test2\ Debug/activeLaunchMode=debug
 org.eclipse.cdt.dsf.gdb.gdbRemotedescriptorType\:test2\ Debug/activeLaunchTarget=null\:---

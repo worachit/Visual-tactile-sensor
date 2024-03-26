@@ -4,4 +4,4 @@
 //org.eclipse.debug.core.PREFERRED_DELEGATES/org.eclipse.cdt.launch.postmortemLaunchType=org.eclipse.cdt.dsf.gdb.launch.coreCLaunch,debug,;
 //org.eclipse.debug.core.PREFERRED_DELEGATES/org.eclipse.cdt.launch.remoteApplicationLaunchType=org.eclipse.rse.remotecdt.dsf.debug,debug,;
 eclipse.preferences.version=1
-prefWatchExpressions=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<watchExpressions>\r\n    <expression enabled\="true" text\="image"/>\r\n    <expression enabled\="true" text\="status"/>\r\n    <expression enabled\="true" text\="is_dma_usart_finish"/>\r\n    <expression enabled\="true" text\="toggle_dummy"/>\r\n</watchExpressions>\r\n
+prefWatchExpressions=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\n<watchExpressions>\n    <expression enabled\="true" text\="image"/>\n    <expression enabled\="true" text\="status"/>\n    <expression enabled\="true" text\="is_dma_usart_finish"/>\n    <expression enabled\="true" text\="toggle_dummy"/>\n</watchExpressions>\n

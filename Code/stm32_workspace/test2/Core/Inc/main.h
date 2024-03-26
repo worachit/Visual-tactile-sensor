@@ -83,6 +83,10 @@ void Error_Handler(void);
 #define STLK_RX_GPIO_Port GPIOD
 #define STLK_TX_Pin GPIO_PIN_9
 #define STLK_TX_GPIO_Port GPIOD
+#define CAMERA_PWDN_Pin GPIO_PIN_12
+#define CAMERA_PWDN_GPIO_Port GPIOD
+#define CAMERA_RST_Pin GPIO_PIN_13
+#define CAMERA_RST_GPIO_Port GPIOD
 #define USB_OverCurrent_Pin GPIO_PIN_7
 #define USB_OverCurrent_GPIO_Port GPIOG
 #define USB_SOF_Pin GPIO_PIN_8
@@ -107,6 +111,7 @@ void Error_Handler(void);
 #define SWO_GPIO_Port GPIOB
 #define LD2_Pin GPIO_PIN_7
 #define LD2_GPIO_Port GPIOB
+
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

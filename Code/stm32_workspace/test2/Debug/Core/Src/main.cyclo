@@ -1,0 +1,15 @@
+../Core/Src/main.c:86:6:HAL_UART_TxCpltCallback	2
+../Core/Src/main.c:92:9:OV5640_WriteReg	2
+../Core/Src/main.c:100:9:OV5640_ReadReg	2
+../Core/Src/main.c:108:6:OV5640_Powerup	1
+../Core/Src/main.c:122:5:main	1
+../Core/Src/main.c:236:6:SystemClock_Config	4
+../Core/Src/main.c:294:13:MX_DCMI_Init	2
+../Core/Src/main.c:331:13:MX_I2C1_Init	4
+../Core/Src/main.c:379:13:MX_SPI1_Init	2
+../Core/Src/main.c:419:13:MX_USART3_UART_Init	2
+../Core/Src/main.c:454:13:MX_USB_OTG_FS_PCD_Init	2
+../Core/Src/main.c:487:13:MX_DMA_Init	1
+../Core/Src/main.c:501:13:MX_FMC_Init	2
+../Core/Src/main.c:559:13:MX_GPIO_Init	1
+../Core/Src/main.c:661:6:Error_Handler	1

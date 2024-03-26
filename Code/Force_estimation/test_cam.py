@@ -19,14 +19,15 @@ def convert_rgb565_to_rgb(rgb565_array):
 if __name__ == "__main__":
     # configure the serial connections
     ser = serial.Serial(
-        port='COM8',
+        port='/dev/ttyACM0',
         baudrate=115200,
         parity=serial.PARITY_NONE,
         stopbits=serial.STOPBITS_ONE,
         bytesize=serial.EIGHTBITS, 
         timeout=30000
     )
-    ser.set_buffer_size(rx_size = int(5*DATA_SIZE/4), tx_size = int(5*DATA_SIZE/4))
+    # ser.reset_input_buffer()
+    # ser.set_buffer_size(rx_size = int(5*DATA_SIZE/4), tx_size = int(5*DATA_SIZE/4))
 
     ser.isOpen()
     data = ser.read(int(DATA_SIZE)) 
