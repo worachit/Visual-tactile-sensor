@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 
-file_path = "./Serial Debug 2024-3-20 1374.txt"
+file_path = "./Serial Debug 2024-3-26 143220.txt"
 
 
 def convert_rgb565_to_rgb(rgb565_array):
@@ -25,7 +25,7 @@ with open(file_path, "r") as f:
     if len(separated_content) == DATA_SIZE:
         print("correct data")
         for i in range(0,DATA_SIZE,2):
-            number = int(separated_content[i] + separated_content[i+1], 16)
+            number = int(separated_content[i+1] + separated_content[i], 16)
             data.append(number)
 
         data = np.array(data, dtype=np.uint16)

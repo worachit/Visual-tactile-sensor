@@ -483,7 +483,7 @@ int32_t OV5640_SetPixelFormat(OV5640_Object_t *pObj, uint32_t PixelFormat)
   static const uint16_t OV5640_PF_RGB565[][2] =
   {
     /*  SET PIXEL FORMAT: RGB565 */
-    {OV5640_FORMAT_CTRL00, 0x60},
+    {OV5640_FORMAT_CTRL00, 0x6F},
     {OV5640_FORMAT_MUX_CTRL, 0x01},
   };
 
